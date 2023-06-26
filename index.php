@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Panel de Control</title>
+  <title>Llamadas Mexicali</title>
   <link rel="icon" href="icono/implementtaIcon.png">
   <link rel="stylesheet" href="public/css/bootstrap.css">
   <link href="public/css/styles.css" rel="stylesheet" />
