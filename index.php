@@ -7,7 +7,7 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
   <title>Llamadas Mexicali</title>
-  <link rel="icon" href="icono/implementtaIcon.png">
+  <link rel="icon" href="public/icono/implementtaIcon.png">
   <link rel="stylesheet" href="public/css/bootstrap.css">
   <link href="public/css/styles.css" rel="stylesheet" />
   <link href="public/fontawesome/css/all.css" rel="stylesheet">
