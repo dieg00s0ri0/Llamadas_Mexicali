@@ -12,7 +12,7 @@ function compilado(msj){
     Swal.fire({
         title: 'Exito!',
         text: msj,
-        icon: 'succes',
+        icon: 'success',
         showConfirmButton: true
     }))
 }
