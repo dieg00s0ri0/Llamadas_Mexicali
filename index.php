@@ -239,9 +239,12 @@
           icon: 'error',
           title: 'Usuario no autorizado',
           text: 'Lo sentimos, no tienes permiso para acceder.',
-        })
-        // Redirigir a otra página o realizar otra acción si lo deseas
-        window.location.href = 'https://implementta.net/Reportes/';
+          showConfirmButton: false,
+          timer: 3000 // 3 segundos
+        }).then(function() {
+          // Redirigir a la otra página después de 3 segundos
+          window.location.href = 'https://implementta.net/Callcenter/';
+        });
       </script>
   <?php
     }
