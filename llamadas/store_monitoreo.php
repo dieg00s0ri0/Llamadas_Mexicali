@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 // echo $_FILES['Rmonitoreo']['name'];
 $extencion1 = explode(".", $_FILES['Rmonitoreo']['name']);
 $extencion2 = explode(".", $_FILES['monitoreoI']['name']);
+$plz=$_POST['plz'];
 
 
 
@@ -38,26 +39,26 @@ $extencion2 = explode(".", $_FILES['monitoreoI']['name']);
                         && trim($data_array2[0][6]) == 'Fileout'
                     ) {
                         
-                        Rmonitoreo($tmpName_Rmonitoreo, $cnx,$tmpName_monitoreoI);
+                        Rmonitoreo($tmpName_Rmonitoreo, $cnx,$tmpName_monitoreoI,$plz);
                     } else {
-                        header('Location: ../index.php?error_headers=1');
+                        header('Location: ../index.php?error_headers=1&plz='.$plz);
                     }
                 } else {
-                    header('Location: ../index.php?error_headers=1');
+                    header('Location: ../index.php?error_headers=1&plz='.$plz);
                 }
             } else {
-                header('Location: ../index.php?error_mes=1');
+                header('Location: ../index.php?error_mes=1&plz='.$plz);
             }
         } else {
-            header('Location: ../index.php?error_archivo=1');
+            header('Location: ../index.php?error_archivo=1&plz='.$plz);
         }
     } else {
-        header('Location: ../index.php?error=1');
+        header('Location: ../index.php?error=1&plz='.$plz);
     }
 
 
 // funcion para cargar Rmonitoreo
-function Rmonitoreo($tmpName, $cnx, $tmpName_monitoreoI)
+function Rmonitoreo($tmpName, $cnx, $tmpName_monitoreoI,$plz)
 {
     $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($tmpName);
     $spreadsheet = $spreadsheet->getActiveSheet();
@@ -69,18 +70,18 @@ function Rmonitoreo($tmpName, $cnx, $tmpName_monitoreoI)
         if ($count > 1000) {
             $sobrante = $count % 1000;
             $bloques = ceil($count / 1000);
-            carga_Rmonitoreo($data_array, $cnx, 1, 1000, $bloques, $sobrante, $tmpName_monitoreoI);
+            carga_Rmonitoreo($data_array, $cnx, 1, 1000, $bloques, $sobrante, $tmpName_monitoreoI,$plz);
         } else {
-            carga_Rmonitoreo($data_array, $cnx, 1, $count, 1, 0, $tmpName_monitoreoI);
+            carga_Rmonitoreo($data_array, $cnx, 1, $count, 1, 0, $tmpName_monitoreoI,$plz);
         }
     } else {
-        header('Location: ../index.php?error_sin_datos=1');
+        header('Location: ../index.php?error_sin_datos=1&plz='.$plz);
     }
 }
 
 
 // funcion cagar reportemonitoreo
-function carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $tmpName_monitoreoI)
+function carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $tmpName_monitoreoI,$plz)
 {
     // echo $data_array[1][0];
     $query = '';
@@ -103,19 +104,19 @@ function carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante,
             $bloques -= 1;
             if ($bloques == 1) {
                 $cantidad += $sobrante;
-                carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $tmpName_monitoreoI);
+                carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $tmpName_monitoreoI,$plz);
             } elseif ($bloques == 0) {
-                monitoreoI($tmpName_monitoreoI, $cnx);
+                monitoreoI($tmpName_monitoreoI, $cnx,$plz);
             } else {
                 $cantidad += 1000;
-                carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $tmpName_monitoreoI);
+                carga_Rmonitoreo($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $tmpName_monitoreoI,$plz);
             }
         }
     }
 }
 
 // funcion para cargar monitoreoI
-function monitoreoI($tmpName, $cnx)
+function monitoreoI($tmpName, $cnx,$plz)
 {
     $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($tmpName);
     $spreadsheet = $spreadsheet->getActiveSheet();
@@ -127,17 +128,17 @@ function monitoreoI($tmpName, $cnx)
         if ($count > 1000) {
             $sobrante = $count % 1000;
             $bloques = ceil($count / 1000);
-            carga_monitoreoI($data_array, $cnx, 1, 1000, $bloques, $sobrante);
+            carga_monitoreoI($data_array, $cnx, 1, 1000, $bloques, $sobrante,$plz);
         } else {
-            carga_monitoreoI($data_array, $cnx, 1, $count, 1, 0);
+            carga_monitoreoI($data_array, $cnx, 1, $count, 1, 0,$plz);
         }
     } else {
-        header('Location: ../index.php?error_sin_datos=1');
+        header('Location: ../index.php?error_sin_datos=1&plz='.$plz);
     }
 }
 
 // funcion cargar a tabla monitoreo Isabel
-function carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante)
+function carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante,$plz)
 {
     $query = '';
     $query = 'INSERT INTO MonitoreoIssabel (Duracion, Fileout) VALUES';
@@ -159,20 +160,20 @@ function carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante)
             $bloques -= 1;
             if ($bloques == 1) {
                 $cantidad += $sobrante;
-                carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante);
+                carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante,$plz);
             } elseif ($bloques == 0) {
                 // mandar a llamar el store sp_InsertaFileoutLlamada
-                sp_InsertaFileoutLlamada($_POST['mes'], $_POST['anio'], $cnx);
+                sp_InsertaFileoutLlamada($_POST['mes'], $_POST['anio'], $cnx,$plz);
             } else {
                 $cantidad += 1000;
-                carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante);
+                carga_monitoreoI($data_array, $cnx, $i, $cantidad, $bloques, $sobrante,$plz);
             }
         }
     }
 }
 
 // funcion para llamar al store
-function sp_InsertaFileoutLlamada($mes, $anio, $cnx)
+function sp_InsertaFileoutLlamada($mes, $anio, $cnx,$plz)
 {
     // eliminar los registros del mes y anio que se van a subir
     $delete = "DELETE FROM Duracionllamadas WHERE Anio='$anio' and Mes='$mes'";
@@ -183,11 +184,11 @@ function sp_InsertaFileoutLlamada($mes, $anio, $cnx)
     $resultSt = sqlsrv_fetch_array($st);
     if ($resultSt['resultado'] != 1) {
 
-        header('Location: ../index.php?error_store=1');
+        header('Location: ../index.php?error_store=1&plz='.$plz);
     } else {
-        header('Location: ../index.php?datos_guardados=1');
+        header('Location: ../index.php?datos_guardados=1&plz='.$plz);
     }
-    header('Location: ../index.php?datos_guardados=1');
+    header('Location: ../index.php?datos_guardados=1&plz='.$plz);
 }
     /*}else{
         echo '<meta http-equiv="refresh" content="0,url=../logout.php">';

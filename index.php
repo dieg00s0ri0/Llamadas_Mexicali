@@ -114,6 +114,7 @@
           <hr>
           <div class="p-1 mx-auto">
             <form action="./llamadas/store_monitoreo.php" name="fr" method="POST" onsubmit="javascript:loadInfo_llamadas();" autocomplete="off" enctype="multipart/form-data">
+            <input type="hidden" name="plz" value="<?php echo $plz ?>">
               <!-- contenedor 1 -->
               <div class="p-2 rounded-4 col-md-12" style=" background-color: #E8ECEF; border: inherit;">
                 <div class="text-white m-2 align-items-end" style="text-align:right;">
